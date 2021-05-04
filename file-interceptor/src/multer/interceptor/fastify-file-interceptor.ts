@@ -11,6 +11,7 @@ import { Observable } from "rxjs";
 import FastifyMulter from "fastify-multer";
 import { Options, Multer } from "multer";
 import { MULTER_MODULE_OPTIONS } from "../constant/multer-module-option";
+import { transformException } from "../utils/multer-utils";
 
 type MulterInstance = any;
 export function FastifyFileInterceptor(
@@ -19,7 +20,6 @@ export function FastifyFileInterceptor(
 ): Type<NestInterceptor> {
   class MixinInterceptor implements NestInterceptor {
     protected multer: MulterInstance;
-
     constructor(
       @Optional()
       @Inject(MULTER_MODULE_OPTIONS)
@@ -38,9 +38,9 @@ export function FastifyFileInterceptor(
         this.multer.single(fieldName)(
           ctx.getRequest(),
           ctx.getResponse(),
-          (error: any) => {
-            if (error) {
-              // const error = transformException(err);
+          (err: any) => {
+            if (err) {
+              const error = transformException(err);
               return reject(error);
             }
             resolve();

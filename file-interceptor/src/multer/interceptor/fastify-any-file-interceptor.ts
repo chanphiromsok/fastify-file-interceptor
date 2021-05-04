@@ -14,13 +14,12 @@ import { MULTER_MODULE_OPTIONS } from "../constant/multer-module-option";
 import { transformException } from "../utils/multer-utils";
 
 type MulterInstance = any;
-export function FastifyFilesInterceptor(
-  fieldName: string,
-  maxCount: number,
+export function FastifyAnyFileInterceptor(
   localOptions: Options
 ): Type<NestInterceptor> {
   class MixinInterceptor implements NestInterceptor {
     protected multer: MulterInstance;
+
     constructor(
       @Optional()
       @Inject(MULTER_MODULE_OPTIONS)
@@ -36,17 +35,13 @@ export function FastifyFilesInterceptor(
       const ctx = context.switchToHttp();
 
       await new Promise<void>((resolve, reject) =>
-        this.multer.array(fieldName, maxCount)(
-          ctx.getRequest(),
-          ctx.getResponse(),
-          (err: any) => {
-            if (err) {
-              const error = transformException(err);
-              return reject(error);
-            }
-            resolve();
+        this.multer.any()(ctx.getRequest(), ctx.getResponse(), (err: any) => {
+          if (err) {
+            const error = transformException(err);
+            return reject(error);
           }
-        )
+          resolve();
+        })
       );
 
       return next.handle();
