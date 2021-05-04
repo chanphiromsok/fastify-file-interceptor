@@ -3,4 +3,5 @@ export { FastifyFilesInterceptor } from "./multer/interceptor/fastify-files-inte
 export { FastifyAnyFileInterceptor } from "./multer/interceptor/fastify-any-file-interceptor";
 export { FastifyFileFieldsInterceptor } from "./multer/interceptor/fastify-file-fields-interceptor";
 export { FastifyMulterFile } from "./multer/interface/fastify-multer-interface";
+export { FastifyMulterModule } from "./multer/module/fastify-multer.module";
 import "reflect-metadata";

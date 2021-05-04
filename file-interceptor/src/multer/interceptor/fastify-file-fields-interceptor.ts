@@ -16,7 +16,7 @@ import { transformException } from "../utils/multer-utils";
 type MulterInstance = any;
 export function FastifyFileFieldsInterceptor(
   fields: ReadonlyArray<Field>,
-  localOptions: Options
+  localOptions?: Options
 ): Type<NestInterceptor> {
   class MixinInterceptor implements NestInterceptor {
     protected multer: MulterInstance;

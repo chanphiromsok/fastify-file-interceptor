@@ -17,7 +17,7 @@ type MulterInstance = any;
 export function FastifyFilesInterceptor(
   fieldName: string,
   maxCount: number,
-  localOptions: Options
+  localOptions?: Options
 ): Type<NestInterceptor> {
   class MixinInterceptor implements NestInterceptor {
     protected multer: MulterInstance;
