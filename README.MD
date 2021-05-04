@@ -211,3 +211,5 @@ export const filesMapper = ({ files, req }: FilesMapper) => {
   });
 };
 ```
+
+**Exmaple Source Code :** <a href="https://github.com/chanphiromsok/Fastify-Upload">https://github.com/chanphiromsok/Fastify-Upload</a>
