@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES6",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "resolveJsonModule": true,
+    "noEmitOnError": true,
+    "esModuleInterop": true,
+    "importHelpers": true,
+    "paths": {
+      "@nestjs-fastify-file-interceptor": ["./file-interceptor/src/index"]
+    }
+  }
+}
