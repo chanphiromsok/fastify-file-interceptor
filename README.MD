@@ -23,7 +23,7 @@ async function bootstrap(): Promise<void> {
 bootstrap();
 ```
 
-**Exmaple**
+**Example**
 >app.controller.ts
 ```typescript
 import {FastifyFileInterceptor,FastifyFilesInterceptor,FastifyMulterFile,} from "fastify-file-interceptor"
@@ -212,4 +212,4 @@ export const filesMapper = ({ files, req }: FilesMapper) => {
 };
 ```
 
-**Exmaple Source Code :** <a href="https://github.com/chanphiromsok/Fastify-Upload">https://github.com/chanphiromsok/Fastify-Upload</a>
+**Example Source Code :** <a href="https://github.com/chanphiromsok/Fastify-Upload">https://github.com/chanphiromsok/Fastify-Upload</a>
