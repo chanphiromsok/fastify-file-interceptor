@@ -5,6 +5,7 @@
 ```yarn add fastify-file-interceptor```
 </br>
 **FastifyFileInterceptor() may not be compatible with third party cloud providers like Google Firebase or others.**
+**This package is base on NestJs ,fastify-multer**
 
 >main.ts
 ```javascript

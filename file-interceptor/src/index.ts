@@ -1,7 +1,20 @@
-export { FastifyFileInterceptor } from "./multer/interceptor/fastify-file-interceptor";
-export { FastifyFilesInterceptor } from "./multer/interceptor/fastify-files-interceptor";
-export { FastifyAnyFileInterceptor } from "./multer/interceptor/fastify-any-file-interceptor";
-export { FastifyFileFieldsInterceptor } from "./multer/interceptor/fastify-file-fields-interceptor";
+export { FileFastifyInterceptor } from "./multer/interceptor/file-fastify-interceptor";
+export { FilesFastifyInterceptor } from "./multer/interceptor/files-fastify-interceptor";
+export { AnyFileFastifyInterceptor } from "./multer/interceptor/any-file-fastify-interceptor";
+export { FileFieldsFastifyInterceptor } from "./multer/interceptor/file-fields-fastify-interceptor";
 export { FastifyMulterFile } from "./multer/interface/fastify-multer-interface";
+export { FastifyMulterOptionsFactory } from "./multer/interface/fastify-multer-module-interface";
 export { FastifyMulterModule } from "./multer/module/fastify-multer.module";
 import "reflect-metadata";
+export {
+  DiskStorageOptions,
+  ErrorCode,
+  Field,
+  FileFilterCallback,
+  Multer,
+  MulterError,
+  Options,
+  StorageEngine,
+  diskStorage,
+  memoryStorage,
+} from "multer";

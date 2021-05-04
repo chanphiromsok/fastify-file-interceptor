@@ -4,14 +4,14 @@ import { Options } from "multer";
 
 export type MulterModuleOptions = Options;
 
-export interface MulterOptionsFactory {
+export interface FastifyMulterOptionsFactory {
   createMulterOptions(): Promise<MulterModuleOptions> | MulterModuleOptions;
 }
 
-export interface MulterModuleAsyncOptions
+export interface FastifyMulterModuleAsyncOptions
   extends Pick<ModuleMetadata, "imports"> {
-  useExisting?: Type<MulterOptionsFactory>;
-  useClass?: Type<MulterOptionsFactory>;
+  useExisting?: Type<FastifyMulterOptionsFactory>;
+  useClass?: Type<FastifyMulterOptionsFactory>;
   useFactory?: (
     ...args: any[]
   ) => Promise<MulterModuleOptions> | MulterModuleOptions;

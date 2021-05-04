@@ -15,8 +15,7 @@
     "noEmitOnError": true,
     "esModuleInterop": true,
     "importHelpers": true,
-    "paths": {
-      "@nestjs-fastify-file-interceptor": ["./file-interceptor/src/index"]
-    }
-  }
+    "allowJs": true
+  },
+  "exclude": ["test", "dist"]
 }

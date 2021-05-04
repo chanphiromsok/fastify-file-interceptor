@@ -5,11 +5,5 @@
     "outDir": "../../dist/libs/file-interceptor"
   },
   "include": ["src/**/*"],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "test",
-    "**/*spec.ts",
-    "fastify-file-upload"
-  ]
+  "exclude": ["node_modules", "dist", "test", "fastify-file-upload"]
 }

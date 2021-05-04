@@ -4,9 +4,9 @@ import {
   MULTER_MODULE_ID,
 } from "../constant/multer-module-option";
 import {
-  MulterModuleAsyncOptions,
+  FastifyMulterOptionsFactory,
   MulterModuleOptions,
-  MulterOptionsFactory,
+  FastifyMulterModuleAsyncOptions,
 } from "../interface/fastify-multer-module-interface";
 import { randomStringGenerator } from "../utils/random-generator";
 
@@ -26,7 +26,9 @@ export class FastifyMulterModule {
     };
   }
 
-  static registerAsync(options: MulterModuleAsyncOptions): DynamicModule {
+  static registerAsync(
+    options: FastifyMulterModuleAsyncOptions
+  ): DynamicModule {
     return {
       module: FastifyMulterModule,
       imports: options.imports,
@@ -42,7 +44,7 @@ export class FastifyMulterModule {
   }
 
   private static createAsyncProviders(
-    options: MulterModuleAsyncOptions
+    options: FastifyMulterModuleAsyncOptions
   ): Provider[] {
     if (options.useExisting || options.useFactory) {
       return [this.createAsyncOptionsProvider(options)];
@@ -57,7 +59,7 @@ export class FastifyMulterModule {
   }
 
   private static createAsyncOptionsProvider(
-    options: MulterModuleAsyncOptions
+    options: FastifyMulterModuleAsyncOptions
   ): Provider {
     if (options.useFactory) {
       return {
@@ -68,7 +70,7 @@ export class FastifyMulterModule {
     }
     return {
       provide: MULTER_MODULE_OPTIONS,
-      useFactory: async (optionsFactory: MulterOptionsFactory) =>
+      useFactory: async (optionsFactory: FastifyMulterOptionsFactory) =>
         optionsFactory.createMulterOptions(),
       inject: [options.useExisting || options.useClass],
     };

@@ -9,17 +9,18 @@ import {
 } from "@nestjs/common";
 import { Observable } from "rxjs";
 import FastifyMulter from "fastify-multer";
-import { Options, Multer } from "multer";
+import { Options, Multer, Field } from "multer";
 import { MULTER_MODULE_OPTIONS } from "../constant/multer-module-option";
 import { transformException } from "../utils/multer-utils";
 
 type MulterInstance = any;
-export function FastifyFileInterceptor(
-  fieldName: string,
+export function FileFieldsFastifyInterceptor(
+  fields: ReadonlyArray<Field>,
   localOptions?: Options
 ): Type<NestInterceptor> {
   class MixinInterceptor implements NestInterceptor {
     protected multer: MulterInstance;
+
     constructor(
       @Optional()
       @Inject(MULTER_MODULE_OPTIONS)
@@ -35,7 +36,7 @@ export function FastifyFileInterceptor(
       const ctx = context.switchToHttp();
 
       await new Promise<void>((resolve, reject) =>
-        this.multer.single(fieldName)(
+        this.multer.fields(fields)(
           ctx.getRequest(),
           ctx.getResponse(),
           (err: any) => {
