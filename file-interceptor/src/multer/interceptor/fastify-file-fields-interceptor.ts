@@ -9,14 +9,13 @@ import {
 } from "@nestjs/common";
 import { Observable } from "rxjs";
 import FastifyMulter from "fastify-multer";
-import { Options, Multer } from "multer";
-import { Fields } from "../interface/fastify-multer-interface";
+import { Options, Multer, Field } from "multer";
 import { MULTER_MODULE_OPTIONS } from "../constant/multer-module-option";
 import { transformException } from "../utils/multer-utils";
 
 type MulterInstance = any;
-export function FastifyFieldsFileInterceptor(
-  fields: ReadonlyArray<Fields>,
+export function FastifyFileFieldsInterceptor(
+  fields: ReadonlyArray<Field>,
   localOptions: Options
 ): Type<NestInterceptor> {
   class MixinInterceptor implements NestInterceptor {

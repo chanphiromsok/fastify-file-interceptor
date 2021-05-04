@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "main": "dist/index.js",
   "types": "./dist/index.d.ts",
+  "author": "Rom Sloy",
   "dependencies": {
     "@nestjs/common": "^7.6.15",
     "@types/multer": "^1.4.5",
-    "fastify-file": "^1.0.0",
+    "fastify-file-interceptor": "^1.0.0",
     "fastify-multer": "^2.0.2",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.0.0"
