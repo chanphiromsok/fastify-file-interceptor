@@ -155,8 +155,7 @@ export class AppController {
 ```
 **NOTE property destination inside distStorage is the location in our project directory where we want to store the image**
 </br>
-> -Why we using FastifyAdatper then define interface Request of Express instead FastifyRequest on @Req()  decorator ? because I wrote this package is reply on fastify-multer and fastify-multer reply on express-multer the "req" is fastify,
-> another reason function fileFiler and filename inside diskStorage use Request interface Express
+> -Why we using FastifyAdatper then define interface Request from "express" instead interface FastifyRequest  from "fastify" ? because function fileFiler and filename inside diskStorage use Request interface Express
 
 >file-upload-util.ts
 ```javascript
