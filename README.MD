@@ -9,7 +9,10 @@
 
 >main.ts
 ```javascript
-import { contentParser } from 'fastify-multer';
+you can import from both source
+1- import { contentParser } from 'fastify-multer';
+2- import { contentParser } from 'fastify-file-interceptor';
+
 import 'reflect-metadata';
 import { FastifyAdapter,NestFastifyApplication } from '@nestjs/platform-fastify';
 import { join } from "path"

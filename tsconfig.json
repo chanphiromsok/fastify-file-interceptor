@@ -17,5 +17,5 @@
     "importHelpers": true,
     "allowJs": true
   },
-  "exclude": ["example", "dist"]
+  "exclude": ["dist"]
 }
