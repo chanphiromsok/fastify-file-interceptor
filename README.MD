@@ -230,7 +230,9 @@ import {
   FilesFastifyInterceptor,
 } from 'fastify-file-interceptor';
 ```
-```"fastify-file-interceptor" using same as  "@nestjs/platform-express a little different with some interface```
+```typescript
+"fastify-file-interceptor" using same as  "@nestjs/platform-express" a little different with some interface more document on Nest official page
+```
 
 ```typescript
 "@nestjs/platform-express"
@@ -239,8 +241,9 @@ import {
   FileFieldsInterceptor,
   FileInterceptor,
   FilesInterceptor,
-} from '@nestjs/platform-express';
+} from "@nestjs/platform-express";
 ```
+
 **you can install example test on swagger**
 **Example** <a href="https://github.com/chanphiromsok/exmaple-fastify-file-interceptor">https://github.com/chanphiromsok/exmaple-fastify-file-interceptor</a>
 **I hope creator NestJs add this feature to "@nestjs/platform-fastify"**
