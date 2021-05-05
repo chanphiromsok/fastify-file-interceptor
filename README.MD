@@ -11,20 +11,26 @@
 ```javascript
 import { contentParser } from 'fastify-multer';
 import 'reflect-metadata';
-import {FastifyAdapter,NestFastifyApplication} from '@nestjs/platform-fastify';
+import { FastifyAdapter,NestFastifyApplication } from '@nestjs/platform-fastify';
+import { join } from "path"
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter()
   );
+  await app.listen(3000);
+
   //add this line
-  app.register(contentParser);
+  app.register(contentParser); yarn add fastify-multer
+  app.useStaticAsset({root: join(__dirname,"../../example")}) yarn add fastify-static
 }
 bootstrap();
 ```
 
-**Example**
+
+**Example
+NOTE diskStorage you can import from "multer" or "fastify-file-interceptor" is the same**
 >app.controller.ts
 ```typescript
 import {
@@ -50,6 +56,7 @@ import {
   FileFastifyInterceptor,
   FileFieldsFastifyInterceptor,
   FilesFastifyInterceptor,
+
 } from 'fastify-file-interceptor';
 @Controller()
 @ApiTags('Upload File ')
