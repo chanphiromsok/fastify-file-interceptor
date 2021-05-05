@@ -1,4 +1,4 @@
 node_modules
-.gitingore
-dist
+.gitignore
 .vscode
+tsconfig.tsbuildinfo

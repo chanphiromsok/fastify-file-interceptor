@@ -17,5 +17,5 @@
     "importHelpers": true,
     "allowJs": true
   },
-  "exclude": ["dist", "exmaple-fastify-file-interceptor"]
+  "exclude": ["dist", "node_modules"]
 }

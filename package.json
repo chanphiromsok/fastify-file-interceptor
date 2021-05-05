@@ -1,8 +1,8 @@
 {
   "name": "fastify-file-interceptor",
-  "version": "1.0.3",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "version": "1.0.4",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "description": "This library for Nestjs using FastifyAdapter it rely on library fastify-multer and express multer",
   "author": {
     "name": "Rom",
@@ -30,7 +30,14 @@
     "fastify",
     "interceptor",
     "upload",
-    "fastify file interceptor"
+    "fastify file interceptor",
+    "form",
+    "post",
+    "multipart",
+    "form-data",
+    "formdata",
+    "fastify",
+    "middleware"
   ],
   "dependencies": {
     "fastify-multer": "^2.0.2",
