@@ -14,7 +14,7 @@ import { MULTER_MODULE_OPTIONS } from "../constant/multer-module-option";
 import { transformException } from "../utils/multer-utils";
 
 type MulterInstance = any;
-export function AnyFileFastifyInterceptor(
+export function AnyFilesFastifyInterceptor(
   localOptions?: Options
 ): Type<NestInterceptor> {
   class MixinInterceptor implements NestInterceptor {

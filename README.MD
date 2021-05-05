@@ -52,11 +52,10 @@ import {
 } from './dto/re-export-dto';
 import { editFileName, imageFileFilter } from './utils/file-upload-util';
 import {
-  AnyFileFastifyInterceptor,
+  AnyFilesFastifyInterceptor,
   FileFastifyInterceptor,
   FileFieldsFastifyInterceptor,
   FilesFastifyInterceptor,
-
 } from 'fastify-file-interceptor';
 @Controller()
 @ApiTags('Upload File ')
@@ -104,7 +103,7 @@ export class AppController {
   @ApiConsumes('multipart/form-data')
   @Post('any-file')
   @UseInterceptors(
-    AnyFileFastifyInterceptor({
+    AnyFilesFastifyInterceptor({
       storage: diskStorage({
         destination: './upload/any',
         filename: editFileName,
@@ -220,5 +219,26 @@ export const filesMapper = ({ files, req }: FilesMapper) => {
     };
   });
 };
+```
+**Usage**
+```typescript
+"fastify-file-interceptor"
+import {
+  AnyFilesFastifyInterceptor,
+  FileFastifyInterceptor,
+  FileFieldsFastifyInterceptor,
+  FilesFastifyInterceptor,
+} from 'fastify-file-interceptor';
+```
+```"fastify-file-interceptor" using same as  "@nestjs/platform-express a little different with some interface```
+
+```typescript
+"@nestjs/platform-express"
+import {
+  AnyFilesInterceptor,
+  FileFieldsInterceptor,
+  FileInterceptor,
+  FilesInterceptor,
+} from '@nestjs/platform-express';
 ```
 **you can install example test on swagger**

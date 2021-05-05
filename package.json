@@ -1,9 +1,9 @@
 {
   "name": "fastify-file-interceptor",
   "version": "1.0.0",
-  "main": "dist/index.js",
+  "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "description": "This libray is rely on fastify-multer and express multer",
+  "description": "This library is rely on fastify-multer and express multer",
   "author": {
     "name": "Rom",
     "url": "https://github.com/chanphiromsok"
