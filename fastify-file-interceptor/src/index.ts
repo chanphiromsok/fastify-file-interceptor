@@ -5,7 +5,6 @@ export { FileFieldsFastifyInterceptor } from "./multer/interceptor/file-fields-f
 export { FastifyMulterFile } from "./multer/interface/fastify-multer-interface";
 export { FastifyMulterOptionsFactory } from "./multer/interface/fastify-multer-module-interface";
 export { FastifyMulterModule } from "./multer/module/fastify-multer.module";
-import "reflect-metadata";
 export {
   DiskStorageOptions,
   ErrorCode,

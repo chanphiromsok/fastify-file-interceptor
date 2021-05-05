@@ -27,7 +27,6 @@ bootstrap();
 **Example**
 >app.controller.ts
 ```typescript
-import {FastifyFileInterceptor,FastifyFilesInterceptor,FastifyMulterFile,} from "fastify-file-interceptor"
 import {
   Body,
   Controller,
@@ -39,16 +38,19 @@ import {
 import { ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { diskStorage } from 'multer';
 import { AppService } from './app.service';
-import { AnyFileDto } from './dto/any-file-dto';
-import { MultipleFileDto } from './dto/multiple-files-dto';
-import { SingleFileDto } from './dto/single-file-dto';
-import { FastifyAnyFileInterceptor } from './interceptor/fastify-any-file-interceptor';
-import { FastifyFileFieldsInterceptor } from './interceptor/fastify-file-field-interceptor';
-import { FastifyFileInterceptor } from './interceptor/fastify-file-interceptor';
-import { FastifyFilesInterceptor } from './interceptor/fastify-files-interceptor';
+import {
+  MultipleFileDto,
+  SingleFileDto,
+  AnyFileDto,
+  FieldsFileDto,
+} from './dto/re-export-dto';
 import { editFileName, imageFileFilter } from './utils/file-upload-util';
-import { FieldsFileDto } from './dto/fields-file-fto';
-
+import {
+  AnyFileFastifyInterceptor,
+  FileFastifyInterceptor,
+  FileFieldsFastifyInterceptor,
+  FilesFastifyInterceptor,
+} from 'fastify-file-interceptor';
 @Controller()
 @ApiTags('Upload File ')
 export class AppController {
@@ -57,7 +59,7 @@ export class AppController {
   @ApiConsumes('multipart/form-data')
   @Post('single-file')
   @UseInterceptors(
-    FastifyFileInterceptor('photo_url', {
+    FileFastifyInterceptor('photo_url', {
       storage: diskStorage({
         destination: './upload/single',
         filename: editFileName,
@@ -66,38 +68,36 @@ export class AppController {
     }),
   )
   single(
-    @UploadedFile() file: FastifyMulterFile,
+    @UploadedFile() file: Express.Multer.File,
     @Body() body: SingleFileDto,
   ) {
-    console.log({ ...body, file });
+    console.log({ ...body, photo_url: file });
     return { ...body, photo_url: file };
   }
 
   @ApiConsumes('multipart/form-data')
   @Post('multiple-file')
   @UseInterceptors(
-    FastifyFilesInterceptor('photo_url', 10, {
+    FilesFastifyInterceptor('photo_url', 10, {
       storage: diskStorage({
-        destination: './upload/single',
+        destination: './upload/multiple',
         filename: editFileName,
       }),
       fileFilter: imageFileFilter,
     }),
   )
   multiple(
-    @UploadedFiles() files: FastifyMulterFile[],
+    @UploadedFiles() files: Express.Multer.File[],
     @Body() body: MultipleFileDto,
   ) {
     console.log({ ...body, photo_url: files });
     return { ...body, photo_url: files };
   }
 
-
-
   @ApiConsumes('multipart/form-data')
   @Post('any-file')
   @UseInterceptors(
-    FastifyAnyFileInterceptor({
+    AnyFileFastifyInterceptor({
       storage: diskStorage({
         destination: './upload/any',
         filename: editFileName,
@@ -106,22 +106,24 @@ export class AppController {
     }),
   )
   anyFile(
-    @UploadedFiles() files: FastifyMulterFile[],
+    @UploadedFiles() files: Express.Multer.File,
     @Body() body: AnyFileDto,
   ) {
-    console.log({ ...body, files });
-    return { ...body,photo_url: files };
+    console.log({ ...body, photo_url: files });
+    return { ...body, photo_url: files };
   }
-
-
 
   @ApiConsumes('multipart/form-data')
   @Post('fields-file')
   @UseInterceptors(
-    FastifyFileFieldsInterceptor(
+    FileFieldsFastifyInterceptor(
       [
         {
           name: 'photo_url',
+          maxCount: 10,
+        },
+        {
+          name: 'images',
           maxCount: 10,
         },
       ],
@@ -134,12 +136,12 @@ export class AppController {
       },
     ),
   )
-  fields(@Body() body: FieldsFileDto,
-          @UploadedFiles() { photo_url } ) {
-    console.log(photo_url);
-    return { ...body, photo_url };
+  fields(@UploadedFiles() { photo_url, images }, @Body() body: FieldsFileDto) {
+    console.log({ ...body, photo_url, images });
+    return { ...body, photo_url, images };
   }
 }
+
 
 ```
 **NOTE property destination inside distStorage is the location in our project directory where we want to store the image**
@@ -149,25 +151,21 @@ export class AppController {
 
 >file-upload-util.ts
 ```javascript
-import { FastifyReply } from 'fastify';
+import { Request } from 'express';
 import { extname } from 'path';
 
 export const editFileName = (
-  req: FastifyReply,
+  req: Request,
   file: Express.Multer.File,
   callback
 ) => {
   const name = file.originalname.split('.')[0];
   const fileExtName = extname(file.originalname);
-  const randomName = Array(4)
-    .fill(null)
-    .map(() => Math.round(Math.random() * 16).toString(16))
-    .join('');
-  callback(null, `${name}-${randomName}${fileExtName}`);
+  callback(null, `${name}${fileExtName}`);
 };
 
 export const imageFileFilter = (
-  req: FastifyReply,
+  req: Request,
   file: Express.Multer.File,
   callback
 ) => {
@@ -178,18 +176,22 @@ export const imageFileFilter = (
 };
 ```
 
+
+**If you want to create as CDN from for image and display in browser look at this**
+
+**This page we use interface FastifyRequest  instead of interface Request Express because out application use FastifyAdapter and request object is fastify not express**
 >file-mapper.ts
 ```javascript
-import { Request } from 'express';
+import { FastifyRequest } from 'fastify';
 
 interface FileMapper {
   file: Express.Multer.File;
-  req: Request;
+  req: FastifyRequest;
 }
 
 interface FilesMapper {
   files: Express.Multer.File[];
-  req: Request;
+  req: FastifyRequest;
 }
 
 export const fileMapper = ({ file, req }: FileMapper) => {
@@ -212,5 +214,4 @@ export const filesMapper = ({ files, req }: FilesMapper) => {
   });
 };
 ```
-
-**Example Source Code :** <a href="https://github.com/chanphiromsok/Fastify-Upload">https://github.com/chanphiromsok/Fastify-Upload</a>
+**you can install example test on swagger**
