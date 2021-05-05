@@ -9,10 +9,7 @@
 
 >main.ts
 ```javascript
-you can import from both source
-1- import { contentParser } from 'fastify-multer';
-2- import { contentParser } from 'fastify-file-interceptor';
-
+import { contentParser } from 'fastify-multer';
 import 'reflect-metadata';
 import { FastifyAdapter,NestFastifyApplication } from '@nestjs/platform-fastify';
 import { join } from "path"
@@ -244,5 +241,5 @@ import {
 ```
 
 **you can install example test on swagger**
-**Example** <a href="https://github.com/chanphiromsok/exmaple-fastify-file-interceptor">https://github.com/chanphiromsok/exmaple-fastify-file-interceptor</a>
+**Example** <a href="https://github.com/chanphiromsok/example-fastify-file-interceptor">https://github.com/chanphiromsok/example-fastify-file-interceptor</a>
 **I hope creator NestJs add this feature to "@nestjs/platform-fastify"**
