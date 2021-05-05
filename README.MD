@@ -184,10 +184,7 @@ export const imageFileFilter = (
   callback(null, true);
 };
 ```
-
-
 **If you want to create as CDN from for image and display in browser look at this**
-
 **This page we use interface FastifyRequest  instead of interface Request Express because out application use FastifyAdapter and request object is fastify not express**
 >file-mapper.ts
 ```javascript
@@ -245,3 +242,5 @@ import {
 } from '@nestjs/platform-express';
 ```
 **you can install example test on swagger**
+**Example** <a href="https://github.com/chanphiromsok/exmaple-fastify-file-interceptor">https://github.com/chanphiromsok/exmaple-fastify-file-interceptor</a>
+**I hope creator NestJs add this feature to "@nestjs/platform-fastify"**
