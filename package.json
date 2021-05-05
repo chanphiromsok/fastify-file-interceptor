@@ -1,9 +1,9 @@
 {
   "name": "fastify-file-interceptor",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "description": "This library is rely on fastify-multer and express multer",
+  "description": "This library for Nestjs using FastifyAdapter it rely on library fastify-multer and express multer",
   "author": {
     "name": "Rom",
     "url": "https://github.com/chanphiromsok"
@@ -11,7 +11,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rimraf dist && tsc",
-    "prepublish": "npm run build"
+    "prepare": "npm run build"
   },
   "devDependencies": {
     "@nestjs/common": "^7.6.15",
