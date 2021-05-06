@@ -1,13 +1,14 @@
 **Installation**
 
-```npm install fastify-file-interceptor```
+`npm install fastify-file-interceptor`
 </br>
-```yarn add fastify-file-interceptor```
+`yarn add fastify-file-interceptor`
 </br>
 **FileFastifyInterceptor() may not be compatible with third party cloud providers like Google Firebase or others.**
 **This package is base on NestJs ,fastify-multer**
 
->main.ts
+> main.ts
+
 ```javascript
 import { contentParser } from 'fastify-multer';
 import 'reflect-metadata';
@@ -28,10 +29,8 @@ async function bootstrap(): Promise<void> {
 bootstrap();
 ```
 
+> app.controller.ts
 
-**Example
-NOTE diskStorage you can import from "multer" or "fastify-file-interceptor" is the same**
->app.controller.ts
 ```typescript
 import {
   Body,
@@ -40,131 +39,132 @@ import {
   UploadedFile,
   UploadedFiles,
   UseInterceptors,
-} from '@nestjs/common';
-import { ApiConsumes, ApiTags } from '@nestjs/swagger';
-import { diskStorage } from 'multer';
-import { AppService } from './app.service';
+} from "@nestjs/common";
+import { ApiConsumes, ApiTags } from "@nestjs/swagger";
+import { diskStorage } from "multer";
+import { AppService } from "./app.service";
 import {
   MultipleFileDto,
   SingleFileDto,
   AnyFileDto,
   FieldsFileDto,
-} from './dto/re-export-dto';
-import { editFileName, imageFileFilter } from './utils/file-upload-util';
+} from "./dto/re-export-dto";
+import { editFileName, imageFileFilter } from "./utils/file-upload-util";
 import {
   AnyFilesFastifyInterceptor,
   FileFastifyInterceptor,
   FileFieldsFastifyInterceptor,
   FilesFastifyInterceptor,
-} from 'fastify-file-interceptor';
+} from "fastify-file-interceptor";
 @Controller()
-@ApiTags('Upload File ')
+@ApiTags("Upload File ")
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @ApiConsumes('multipart/form-data')
-  @Post('single-file')
+  @ApiConsumes("multipart/form-data")
+  @Post("single-file")
   @UseInterceptors(
-    FileFastifyInterceptor('photo_url', {
+    FileFastifyInterceptor("photo_url", {
       storage: diskStorage({
-        destination: './upload/single',
+        destination: "./upload/single",
         filename: editFileName,
       }),
       fileFilter: imageFileFilter,
-    }),
+    })
   )
   single(
     @UploadedFile() file: Express.Multer.File,
-    @Body() body: SingleFileDto,
+    @Body() body: SingleFileDto
   ) {
     console.log({ ...body, photo_url: file });
     return { ...body, photo_url: file };
   }
 
-  @ApiConsumes('multipart/form-data')
-  @Post('multiple-file')
+  @ApiConsumes("multipart/form-data")
+  @Post("multiple-file")
   @UseInterceptors(
-    FilesFastifyInterceptor('photo_url', 10, {
+    FilesFastifyInterceptor("photo_url", 10, {
       storage: diskStorage({
-        destination: './upload/multiple',
+        destination: "./upload/multiple",
         filename: editFileName,
       }),
       fileFilter: imageFileFilter,
-    }),
+    })
   )
   multiple(
     @UploadedFiles() files: Express.Multer.File[],
-    @Body() body: MultipleFileDto,
+    @Body() body: MultipleFileDto
   ) {
     console.log({ ...body, photo_url: files });
     return { ...body, photo_url: files };
   }
 
-  @ApiConsumes('multipart/form-data')
-  @Post('any-file')
+  @ApiConsumes("multipart/form-data")
+  @Post("any-file")
   @UseInterceptors(
     AnyFilesFastifyInterceptor({
       storage: diskStorage({
-        destination: './upload/any',
+        destination: "./upload/any",
         filename: editFileName,
       }),
       fileFilter: imageFileFilter,
-    }),
+    })
   )
   anyFile(
     @UploadedFiles() files: Express.Multer.File,
-    @Body() body: AnyFileDto,
+    @Body() body: AnyFileDto
   ) {
     console.log({ ...body, photo_url: files });
     return { ...body, photo_url: files };
   }
 
-  @ApiConsumes('multipart/form-data')
-  @Post('fields-file')
+  @ApiConsumes("multipart/form-data")
+  @Post("fields-file")
   @UseInterceptors(
     FileFieldsFastifyInterceptor(
       [
         {
-          name: 'photo_url',
+          name: "photo_url",
           maxCount: 10,
         },
         {
-          name: 'images',
+          name: "images",
           maxCount: 10,
         },
       ],
       {
         storage: diskStorage({
-          destination: './upload/fields',
+          destination: "./upload/fields",
           filename: editFileName,
         }),
         fileFilter: imageFileFilter,
-      },
-    ),
+      }
+    )
   )
   fields(@UploadedFiles() { photo_url, images }, @Body() body: FieldsFileDto) {
     console.log({ ...body, photo_url, images });
     return { ...body, photo_url, images };
   }
 }
-
-
 ```
+
 **NOTE property destination inside distStorage is the location in our project directory where we want to store the image**
 </br>
-> -Why we using FastifyAdatper then define interface Request from "express" instead interface FastifyRequest  from "fastify" ? because function fileFiler and filename inside diskStorage use Request interface Express
 
->file-upload-util.ts
+> -Why we using FastifyAdatper then define interface Request from "express" instead interface FastifyRequest from "fastify" ? because function fileFiler and filename inside diskStorage use Request interface Express
+
+> file-upload-util.ts
+
 ```javascript
-import { Request } from 'express';
-import { extname } from 'path';
+import { Request } from "express";
+import { extname } from "path";
 
 export const editFileName = (
   req: Request,
   file: Express.Multer.File,
   callback
 ) => {
-  const name = file.originalname.split('.')[0];
+  const name = file.originalname.split(".")[0];
   const fileExtName = extname(file.originalname);
   callback(null, `${name}${fileExtName}`);
 };
@@ -175,16 +175,19 @@ export const imageFileFilter = (
   callback
 ) => {
   if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
-    return callback(new Error('Only image files are allowed!'), false);
+    return callback(new Error("Only image files are allowed!"), false);
   }
   callback(null, true);
 };
 ```
+
 **If you want to create as CDN from for image and display in browser look at this**
-**This page we use interface FastifyRequest  instead of interface Request Express because out application use FastifyAdapter and request object is fastify not express**
->file-mapper.ts
+**This page we use interface FastifyRequest instead of interface Request Express because out application use FastifyAdapter and request object is fastify not express**
+
+> file-mapper.ts
+
 ```javascript
-import { FastifyRequest } from 'fastify';
+import { FastifyRequest } from "fastify";
 
 interface FileMapper {
   file: Express.Multer.File;
@@ -216,22 +219,25 @@ export const filesMapper = ({ files, req }: FilesMapper) => {
   });
 };
 ```
+
 **Usage**
+
 ```typescript
-"fastify-file-interceptor"
+"fastify-file-interceptor";
 import {
   AnyFilesFastifyInterceptor,
   FileFastifyInterceptor,
   FileFieldsFastifyInterceptor,
   FilesFastifyInterceptor,
-} from 'fastify-file-interceptor';
+} from "fastify-file-interceptor";
 ```
+
 ```typescript
 "fastify-file-interceptor" using same as  "@nestjs/platform-express" a little different with some interface more document on Nest official page
 ```
 
 ```typescript
-"@nestjs/platform-express"
+"@nestjs/platform-express";
 import {
   AnyFilesInterceptor,
   FileFieldsInterceptor,
