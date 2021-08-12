@@ -16,7 +16,7 @@ import { transformException } from "../utils/multer-utils";
 type MulterInstance = any;
 export function FilesFastifyInterceptor(
   fieldName: string,
-  maxCount: number,
+  maxCount?: number,
   localOptions?: Options
 ): Type<NestInterceptor> {
   class MixinInterceptor implements NestInterceptor {

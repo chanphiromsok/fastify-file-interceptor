@@ -1,1 +1,1 @@
-export interface FastifyMulterFile extends Express.Multer.File {}
+export interface MulterFile extends Express.Multer.File {}

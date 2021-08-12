@@ -4,3 +4,5 @@ export { AnyFilesFastifyInterceptor } from "./multer/interceptor/any-file-fastif
 export { FileFieldsFastifyInterceptor } from "./multer/interceptor/file-fields-fastify-interceptor";
 export { FastifyMulterModule } from "./multer/module/fastify-multer.module";
 export { diskStorage, memoryStorage } from "multer";
+export { contentParser } from "fastify-multer";
+export { MulterFile } from "./multer/interface/fastify-multer-interface";
