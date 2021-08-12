@@ -7,9 +7,9 @@
 **FileFastifyInterceptor() may not be compatible with third party cloud providers like Google Firebase or others.**
 **This package is base on NestJs ,fastify-multer**
 
-> main.ts
-
 ```javascript
+
+/* main.ts */
 import { contentParser } from 'fastify-multer';
 import 'reflect-metadata';
 import { FastifyAdapter,NestFastifyApplication } from '@nestjs/platform-fastify';
