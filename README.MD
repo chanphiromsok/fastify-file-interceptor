@@ -1,5 +1,8 @@
 ## Installation
 
+This libray for Nest.Js Application use FastifyAdapter that can't use 
+@UseInterceptor or UploadFile decorator this package has provide same functionality as Nest.Js Application use ExpressAdaper,Now it support @UseInterceptor for upload file
+
 
 ### npm
 ```shell
@@ -11,9 +14,12 @@ $ npm install fastify-file-interceptor
 $ yarn add fastify-file-interceptor
 ```
 
-</br>
-**FileFastifyInterceptor() may not be compatible with third party cloud providers like Google Firebase or others.**
-**This package is base on NestJs ,fastify-multer**
+
+#### FileFastifyInterceptor() may not be compatible with third party cloud providers like Google Firebase or others 
+
+#### This package is base on fastify-multer
+---
+
 
 ```typescript
 /* main.ts */
