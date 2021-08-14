@@ -1,16 +1,24 @@
-**Installation**
+## Installation
 
-`npm install fastify-file-interceptor`
-</br>
-`yarn add fastify-file-interceptor`
+
+### npm
+```shell
+$ npm install fastify-file-interceptor
+```
+
+### yarn
+```shell
+$ yarn add fastify-file-interceptor
+```
+
 </br>
 **FileFastifyInterceptor() may not be compatible with third party cloud providers like Google Firebase or others.**
 **This package is base on NestJs ,fastify-multer**
 
-```javascript
-
+```typescript
 /* main.ts */
-import { contentParser } from 'fastify-multer';
+
+import { contentParser } from 'fastify-file-interceptor';
 import 'reflect-metadata';
 import { FastifyAdapter,NestFastifyApplication } from '@nestjs/platform-fastify';
 import { join } from "path"
@@ -29,9 +37,11 @@ async function bootstrap(): Promise<void> {
 bootstrap();
 ```
 
-> app.controller.ts
+
 
 ```typescript
+/* app.controller.ts */
+
 import {
   Body,
   Controller,
@@ -41,7 +51,6 @@ import {
   UseInterceptors,
 } from "@nestjs/common";
 import { ApiConsumes, ApiTags } from "@nestjs/swagger";
-import { diskStorage } from "multer";
 import { AppService } from "./app.service";
 import {
   MultipleFileDto,
@@ -55,12 +64,14 @@ import {
   FileFastifyInterceptor,
   FileFieldsFastifyInterceptor,
   FilesFastifyInterceptor,
+  diskStorage
 } from "fastify-file-interceptor";
 @Controller()
 @ApiTags("Upload File ")
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
+  // Upload single file
   @ApiConsumes("multipart/form-data")
   @Post("single-file")
   @UseInterceptors(
@@ -80,6 +91,7 @@ export class AppController {
     return { ...body, photo_url: file };
   }
 
+  // Upload multiple file
   @ApiConsumes("multipart/form-data")
   @Post("multiple-file")
   @UseInterceptors(
@@ -99,6 +111,7 @@ export class AppController {
     return { ...body, photo_url: files };
   }
 
+  // Upload any file
   @ApiConsumes("multipart/form-data")
   @Post("any-file")
   @UseInterceptors(
@@ -118,6 +131,7 @@ export class AppController {
     return { ...body, photo_url: files };
   }
 
+  // Upload multiple files with different fields
   @ApiConsumes("multipart/form-data")
   @Post("fields-file")
   @UseInterceptors(
@@ -148,10 +162,8 @@ export class AppController {
 }
 ```
 
-**NOTE property destination inside distStorage is the location in our project directory where we want to store the image**
-</br>
+#### Notes : property destination inside distStorage is the location in our project directory where we want to store the image
 
-> -Why we using FastifyAdatper then define interface Request from "express" instead interface FastifyRequest from "fastify" ? because function fileFiler and filename inside diskStorage use Request interface Express
 
 > file-upload-util.ts
 
@@ -181,12 +193,14 @@ export const imageFileFilter = (
 };
 ```
 
-**If you want to create as CDN from for image and display in browser look at this**
-**This page we use interface FastifyRequest instead of interface Request Express because out application use FastifyAdapter and request object is fastify not express**
+### Create url display image in browser
+#### We use interface FastifyRequest 
 
-> file-mapper.ts
+
 
 ```javascript
+/* file-mapper.ts */ 
+
 import { FastifyRequest } from "fastify";
 
 interface FileMapper {
@@ -199,6 +213,7 @@ interface FilesMapper {
   req: FastifyRequest;
 }
 
+// file (single)
 export const fileMapper = ({ file, req }: FileMapper) => {
   const image_url = `${req.protocol}://${req.headers.host}/${file.path}`;
   return {
@@ -208,6 +223,7 @@ export const fileMapper = ({ file, req }: FileMapper) => {
   };
 };
 
+// files (multiple)
 export const filesMapper = ({ files, req }: FilesMapper) => {
   return files.map((file) => {
     const image_url = `${req.protocol}://${req.headers.host}/${file.path}`;
@@ -222,22 +238,28 @@ export const filesMapper = ({ files, req }: FilesMapper) => {
 
 **Usage**
 
+### @nestjs/platform-fastify
 ```typescript
-"fastify-file-interceptor";
+ 
 import {
+  FastifyMulterModule,
   AnyFilesFastifyInterceptor,
   FileFastifyInterceptor,
   FileFieldsFastifyInterceptor,
   FilesFastifyInterceptor,
+  diskStorage, 
+  memoryStorage,
+  MulterFile
+  contentParser
 } from "fastify-file-interceptor";
 ```
 
-```typescript
-"fastify-file-interceptor" using same as  "@nestjs/platform-express" a little different with some interface more document on Nest official page
-```
 
+
+
+### @nestjs/platform-express
 ```typescript
-"@nestjs/platform-express";
+
 import {
   AnyFilesInterceptor,
   FileFieldsInterceptor,
@@ -246,6 +268,4 @@ import {
 } from "@nestjs/platform-express";
 ```
 
-**you can install example test on swagger**
-**Example** <a href="https://github.com/chanphiromsok/example-fastify-file-interceptor">https://github.com/chanphiromsok/example-fastify-file-interceptor</a>
-**I hope creator NestJs add this feature to "@nestjs/platform-fastify"**
+#### you can install example test on swagger
