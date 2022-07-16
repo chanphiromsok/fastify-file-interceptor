@@ -1,15 +1,11 @@
-## Installation
+#### Installation
 
-This libray for Nest.Js Application use FastifyAdapter that can't use 
+This libray for Nest.Js Application use FastifyAdapter that can't use
 @UseInterceptor or UploadFile decorator this package has provide same functionality as Nest.Js Application use ExpressAdaper,Now it support @UseInterceptor for upload file
 
-### Warning
-FileFastifyInterceptor() may not be compatible with third party cloud providers like Google Firebase or others ,This package is base on fastify-multer
+#### Warning
+FileFastifyInterceptor() may not be compatible with third party cloud providers like Google Firebase or others,This package is base on fastify-multer
 
-### npm
-```shell
-$ npm install fastify-file-interceptor
-```
 
 ### yarn
 ```shell
@@ -17,7 +13,7 @@ $ yarn add fastify-file-interceptor
 ```
 
 
- 
+
 ---
 
 
@@ -36,9 +32,11 @@ async function bootstrap(): Promise<void> {
   );
   await app.listen(3000);
 
-  //add this line
-  app.register(contentParser); yarn add fastify-multer
-  app.useStaticAsset({root: join(__dirname,"../../example")}) yarn add fastify-static
+  // Note: add this line
+  // yarn add fastify-multer
+  // yarn add fastify-static
+  app.register(contentParser);
+  app.useStaticAsset({root: join(__dirname,"../../example")})
 }
 bootstrap();
 ```
@@ -200,12 +198,12 @@ export const imageFileFilter = (
 ```
 
 ### Create url display image in browser
-#### We use interface FastifyRequest 
+#### We use interface FastifyRequest
 
 
 
 ```javascript
-/* file-mapper.ts */ 
+/* file-mapper.ts */
 
 import { FastifyRequest } from "fastify";
 
@@ -242,18 +240,16 @@ export const filesMapper = ({ files, req }: FilesMapper) => {
 };
 ```
 
-**Usage**
-
 ### @nestjs/platform-fastify
 ```typescript
- 
+
 import {
   FastifyMulterModule,
   AnyFilesFastifyInterceptor,
   FileFastifyInterceptor,
   FileFieldsFastifyInterceptor,
   FilesFastifyInterceptor,
-  diskStorage, 
+  diskStorage,
   memoryStorage,
   MulterFile
   contentParser
@@ -261,17 +257,4 @@ import {
 ```
 
 
-
-
-### @nestjs/platform-express
-```typescript
-
-import {
-  AnyFilesInterceptor,
-  FileFieldsInterceptor,
-  FileInterceptor,
-  FilesInterceptor,
-} from "@nestjs/platform-express";
-```
-
-#### you can install example test on swagger
+[If it useful please give me some star on github  :star: :star: :star: :star: :star: ](https://www.google.com)

@@ -43,7 +43,7 @@
   ],
   "dependencies": {
     "fastify-multer": "2.0.3",
-    "multer": "1.4.5-lts",
+    "multer": "1.4.5-lts.1",
     "tslib": "^2.2.0"
   },
   "peerDependencies": {
