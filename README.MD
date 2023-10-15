@@ -4,44 +4,71 @@ This libray for Nest.Js Application use FastifyAdapter that can't use
 @UseInterceptor or UploadFile decorator this package has provide same functionality as Nest.Js Application use ExpressAdaper,Now it support @UseInterceptor for upload file
 
 #### Warning
+
 FileFastifyInterceptor() may not be compatible with third party cloud providers like Google Firebase or others,This package is base on fastify-multer
 
-
 ### yarn
+
 ```shell
 $ yarn add fastify-file-interceptor
 ```
 
-
-
 ---
-
 
 ```typescript
 /* main.ts */
 
-import { contentParser } from 'fastify-file-interceptor';
-import 'reflect-metadata';
-import { FastifyAdapter,NestFastifyApplication } from '@nestjs/platform-fastify';
-import { join } from "path"
+import { NestFactory } from "@nestjs/core";
+import {
+  FastifyAdapter,
+  NestFastifyApplication,
+} from "@nestjs/platform-fastify";
+import { AppModule } from "./app.module";
+import { contentParser } from "fastify-file-interceptor";
+import "reflect-metadata";
+import { join } from "path";
+import helmet from "@fastify/helmet";
+import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 
-async function bootstrap(): Promise<void> {
+const swaggerDocument = new DocumentBuilder()
+  .setTitle("API")
+  .setDescription("API")
+  .setVersion("1.0")
+  .addTag("API")
+  .build();
+async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter()
   );
-  await app.listen(3000);
 
-  // Note: add this line
+  await app.register(helmet, {
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: [`'self'`],
+        styleSrc: [`'self'`, `'unsafe-inline'`],
+        imgSrc: [`'self'`, "data:", "validator.swagger.io"],
+        scriptSrc: [`'self'`, `https: 'unsafe-inline'`],
+      },
+    },
+  });
   // yarn add fastify-multer
-  // yarn add fastify-static
-  app.register(contentParser);
-  app.useStaticAsset({root: join(__dirname,"../../example")})
+  await app.register(contentParser);
+  // yarn add @fastify/static
+  await app.useStaticAssets({
+    root: join(__dirname, "../../example"),
+  });
+  // open API
+  SwaggerModule.setup(
+    "api",
+    app,
+    SwaggerModule.createDocument(app, swaggerDocument)
+  );
+  await app.listen(3000);
+  console.log(`APP IS RUNNING ON PORT ${await app.getUrl()}/api`);
 }
 bootstrap();
 ```
-
-
 
 ```typescript
 /* app.controller.ts */
@@ -68,7 +95,7 @@ import {
   FileFastifyInterceptor,
   FileFieldsFastifyInterceptor,
   FilesFastifyInterceptor,
-  diskStorage
+  diskStorage,
 } from "fastify-file-interceptor";
 @Controller()
 @ApiTags("Upload File ")
@@ -168,7 +195,6 @@ export class AppController {
 
 #### Notes : property destination inside distStorage is the location in our project directory where we want to store the image
 
-
 > file-upload-util.ts
 
 ```javascript
@@ -198,9 +224,8 @@ export const imageFileFilter = (
 ```
 
 ### Create url display image in browser
+
 #### We use interface FastifyRequest
-
-
 
 ```javascript
 /* file-mapper.ts */
@@ -241,6 +266,7 @@ export const filesMapper = ({ files, req }: FilesMapper) => {
 ```
 
 ### @nestjs/platform-fastify
+
 ```typescript
 
 import {
@@ -256,5 +282,4 @@ import {
 } from "fastify-file-interceptor";
 ```
 
-
-[If it useful please give me some star on github  :star: :star: :star: :star: :star: ](https://www.google.com)
+[If it useful please give me some star on github :star: :star: :star: :star: :star: ](https://www.google.com)
