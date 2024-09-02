@@ -1,3 +1,5 @@
-import { v4 as uuid } from "uuid";
+const crypto = require("crypto");
 
-export const randomStringGenerator = () => uuid();
+export const randomStringGenerator = () => {
+  return crypto.randomUUID({ disableEntropyCache: true });
+};
