@@ -1,3 +1,8 @@
 {
-  "extends": "./tsconfig.json"
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "fastify-file-interceptor/src"
+  },
+  "include": ["fastify-file-interceptor/src/**/*.ts"],
+  "exclude": ["dist", "node_modules", "example"]
 }

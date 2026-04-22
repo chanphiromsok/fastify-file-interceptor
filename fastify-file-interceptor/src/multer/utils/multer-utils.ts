@@ -3,22 +3,22 @@ import {
   HttpException,
   PayloadTooLargeException,
 } from "@nestjs/common";
-import { multerExceptions } from "./multer-constant";
 
 export function transformException(error: Error | undefined) {
   if (!error || error instanceof HttpException) {
     return error;
   }
-  switch (error.message) {
-    case multerExceptions.LIMIT_FILE_SIZE:
+
+  switch (error.name) {
+    case "RequestFileTooLargeError":
       return new PayloadTooLargeException(error.message);
-    case multerExceptions.LIMIT_FILE_COUNT:
-    case multerExceptions.LIMIT_FIELD_KEY:
-    case multerExceptions.LIMIT_FIELD_VALUE:
-    case multerExceptions.LIMIT_FIELD_COUNT:
-    case multerExceptions.LIMIT_UNEXPECTED_FILE:
-    case multerExceptions.LIMIT_PART_COUNT:
+    case "FilesLimitError":
+    case "FieldsLimitError":
+    case "PartsLimitError":
+    case "PrototypeViolationError":
+    case "InvalidMultipartContentTypeError":
       return new BadRequestException(error.message);
   }
+
   return error;
 }

@@ -1,16 +1,35 @@
 #### Installation
 
-This libray for Nest.Js Application use FastifyAdapter that can't use
-@UseInterceptor or UploadFile decorator this package has provide same functionality as Nest.Js Application use ExpressAdaper,Now it support @UseInterceptor for upload file
+This library for Nestjs applications using FastifyAdapter provides file interceptor support using @fastify/multipart. It now supports interceptor-based upload handling without relying on multer storage helpers.
 
 #### Warning
 
-FileFastifyInterceptor() may not be compatible with third party cloud providers like Google Firebase or others,This package is base on fastify-multer
+FileFastifyInterceptor() may not be compatible with third party cloud providers like Google Firebase or others. This package now uses @fastify/multipart for Fastify file uploads.
 
 ### yarn
 
 ```shell
 $ yarn add fastify-file-interceptor
+```
+
+### Example
+
+Run the provided example app from the repository root:
+
+```shell
+npm run example:start
+```
+
+Then open Swagger UI at:
+
+```text
+http://localhost:3000/api
+```
+
+Run the example upload test:
+
+```shell
+npm run example:test
 ```
 
 ---
@@ -52,7 +71,7 @@ async function bootstrap() {
       },
     },
   });
-  // yarn add fastify-multer
+  // yarn add @fastify/multipart
   await app.register(contentParser);
   // yarn add @fastify/static
   await app.useStaticAssets({
@@ -95,7 +114,6 @@ import {
   FileFastifyInterceptor,
   FileFieldsFastifyInterceptor,
   FilesFastifyInterceptor,
-  diskStorage,
 } from "fastify-file-interceptor";
 @Controller()
 @ApiTags("Upload File ")
@@ -107,15 +125,32 @@ export class AppController {
   @Post("single-file")
   @UseInterceptors(
     FileFastifyInterceptor("photo_url", {
-      storage: diskStorage({
-        destination: "./upload/single",
-        filename: editFileName,
-      }),
+      limits: { fileSize: 1000000 },
       fileFilter: imageFileFilter,
     })
   )
   single(
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile() file: MulterFile,
+    @Body() body: SingleFileDto
+  ) {
+    console.log({ ...body, photo_url: file });
+    return { ...body, photo_url: file };
+  }
+
+  // Upload single file to disk
+  @ApiConsumes("multipart/form-data")
+  @Post("single-file-disk")
+  @UseInterceptors(
+    FileFastifyInterceptor("photo_url", {
+      limits: { fileSize: 1000000 },
+      storage: "disk",
+      destination: "./uploads",
+      filename: (req, file) => `${Date.now()}-${file.originalname}`,
+      fileFilter: imageFileFilter,
+    })
+  )
+  singleDisk(
+    @UploadedFile() file: MulterFile,
     @Body() body: SingleFileDto
   ) {
     console.log({ ...body, photo_url: file });
@@ -127,15 +162,12 @@ export class AppController {
   @Post("multiple-file")
   @UseInterceptors(
     FilesFastifyInterceptor("photo_url", 10, {
-      storage: diskStorage({
-        destination: "./upload/multiple",
-        filename: editFileName,
-      }),
+      limits: { fileSize: 1000000 },
       fileFilter: imageFileFilter,
     })
   )
   multiple(
-    @UploadedFiles() files: Express.Multer.File[],
+    @UploadedFiles() files: MulterFile[],
     @Body() body: MultipleFileDto
   ) {
     console.log({ ...body, photo_url: files });
@@ -147,15 +179,12 @@ export class AppController {
   @Post("any-file")
   @UseInterceptors(
     AnyFilesFastifyInterceptor({
-      storage: diskStorage({
-        destination: "./upload/any",
-        filename: editFileName,
-      }),
+      limits: { fileSize: 1000000 },
       fileFilter: imageFileFilter,
     })
   )
   anyFile(
-    @UploadedFiles() files: Express.Multer.File,
+    @UploadedFiles() files: MulterFile[],
     @Body() body: AnyFileDto
   ) {
     console.log({ ...body, photo_url: files });
@@ -178,10 +207,7 @@ export class AppController {
         },
       ],
       {
-        storage: diskStorage({
-          destination: "./upload/fields",
-          filename: editFileName,
-        }),
+        limits: { fileSize: 1000000 },
         fileFilter: imageFileFilter,
       }
     )
@@ -198,12 +224,12 @@ export class AppController {
 > file-upload-util.ts
 
 ```javascript
-import { Request } from "express";
+import { FastifyRequest } from "fastify";
 import { extname } from "path";
 
 export const editFileName = (
-  req: Request,
-  file: Express.Multer.File,
+  req: FastifyRequest,
+  file: MulterFile,
   callback
 ) => {
   const name = file.originalname.split(".")[0];
@@ -212,8 +238,8 @@ export const editFileName = (
 };
 
 export const imageFileFilter = (
-  req: Request,
-  file: Express.Multer.File,
+  req: FastifyRequest,
+  file: MulterFile,
   callback
 ) => {
   if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
@@ -233,12 +259,12 @@ export const imageFileFilter = (
 import { FastifyRequest } from "fastify";
 
 interface FileMapper {
-  file: Express.Multer.File;
+  file: MulterFile;
   req: FastifyRequest;
 }
 
 interface FilesMapper {
-  files: Express.Multer.File[];
+  files: MulterFile[];
   req: FastifyRequest;
 }
 
@@ -275,10 +301,8 @@ import {
   FileFastifyInterceptor,
   FileFieldsFastifyInterceptor,
   FilesFastifyInterceptor,
-  diskStorage,
-  memoryStorage,
-  MulterFile
-  contentParser
+  MulterFile,
+  contentParser,
 } from "fastify-file-interceptor";
 ```
 
